@@ -3252,9 +3252,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1052457377}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 244a3b1568ead85fc825f44c9b0d4a8b, type: 3}
+  m_Script: {fileID: 11500000, guid: 421ec887f3d29b2c5b5f7138dc57cc87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftPortal: {fileID: 0}
+  rightPortal: {fileID: 0}
+  speed: 3
+  error: 0.05
 --- !u!1 &1714781931
 GameObject:
   m_ObjectHideFlags: 0
