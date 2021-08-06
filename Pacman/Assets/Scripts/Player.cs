@@ -3,42 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MovingObject
 {
     [SerializeField] private GameObject leftPortal;
     [SerializeField] private GameObject rightPortal;
-    [SerializeField] private float speed;
-    [SerializeField] private float error = 0.05f;
-
-    private new Rigidbody2D rigidbody2D;
-    private Animator animator;
-    private Vector2 currentDirection = Vector2.right;
-    private Vector2 nextDirection;
     private Quaternion rightRotation = Quaternion.Euler(0,0,0);
     private Quaternion leftRotation = Quaternion.Euler(0,0,180);
     private Quaternion upRotation = Quaternion.Euler(0,0,90);
     private Quaternion downRotation = Quaternion.Euler(0,0,270);
+    
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        rigidbody2D = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        animator.SetBool("Move", true);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    private void FixedUpdate()
-    {
-        DetectInput();
-        ChangeDirection();    
-    }
-
-    private void DetectInput()
+    protected override void SetNextDirection()
     {
         int horizontal = (int)Input.GetAxisRaw("Horizontal");
         int vertical = (int)Input.GetAxisRaw("Vertical");
@@ -53,76 +28,7 @@ public class Player : MonoBehaviour
             nextDirection = Vector2.up;
     }
 
-    private void ChangeDirection()
-    {
-        if (currentDirection == -nextDirection)
-        {
-            currentDirection = nextDirection;
-            nextDirection = Vector2.zero;
-        }
-        else if (IsHorizontal(currentDirection) && IsVertical(nextDirection))
-        {
-            var fraction = Math.Abs(transform.position.x - Mathf.Round(transform.position.x));
-
-            if (fraction < error)
-            {
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, nextDirection, 1f);
-
-                if (hit.collider == null)
-                {
-                    RoundXPosition();
-                    currentDirection = nextDirection;
-                    nextDirection = Vector2.zero;
-                }    
-            }
-        }
-        else if (IsVertical(currentDirection) && IsHorizontal(nextDirection))
-        {
-            var fraction = Math.Abs(transform.position.y - Mathf.Round(transform.position.y));
-
-            if (fraction < error)
-            {
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, nextDirection, 1f);
-
-                if (hit.collider == null)
-                {
-                    RoundYPosition();
-                    currentDirection = nextDirection;
-                    nextDirection = Vector2.zero;
-                }
-            }
-        }
-
-        SetRotation();
-        SetVelocity();
-    }
-
-    private bool IsHorizontal(Vector2 direction)
-    {
-        return Math.Abs(direction.x) == 1f && Math.Abs(direction.y) == 0f;;
-    }
-    
-    private bool IsVertical(Vector2 direction)
-    {
-        return Math.Abs(direction.y) == 1f && Math.Abs(direction.x) == 0f;;
-    }
-
-    private void RoundXPosition()
-    {
-        transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, 0);
-    }
-
-    private void RoundYPosition()
-    {
-        transform.position = new Vector3(transform.position.x, Mathf.Round(transform.position.y), 0);
-    }
-
-    private void SetVelocity()
-    {
-        rigidbody2D.velocity = currentDirection * speed;
-    }
-
-    private void SetRotation()
+    protected override void SetAnimation()
     {
         if (currentDirection == Vector2.down)
             transform.rotation = downRotation;

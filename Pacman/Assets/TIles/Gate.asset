@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: Wall
+  m_Name: Gate
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 7482667652216324306, guid: 533772b742e224180a7a78a3811ff58d, type: 3}
-  m_Color: {r: 0, g: 0, b: 0.509434, a: 1}
+  m_Sprite: {fileID: 7482667652216324306, guid: a271caa504464ba95ad2f756d75067fb, type: 3}
+  m_Color: {r: 0, g: 0, b: 0.50980395, a: 1}
   m_Transform:
     e00: 1
     e01: 0
