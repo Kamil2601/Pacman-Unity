@@ -12,7 +12,6 @@ public class Player : MovingObject
     private Quaternion upRotation = Quaternion.Euler(0,0,90);
     private Quaternion downRotation = Quaternion.Euler(0,0,270);
     
-
     protected override void SetNextDirection()
     {
         int horizontal = (int)Input.GetAxisRaw("Horizontal");

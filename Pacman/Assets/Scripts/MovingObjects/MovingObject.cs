@@ -16,10 +16,8 @@ public abstract class MovingObject : MonoBehaviour
     // Start is called before the first frame update
     protected void Start()
     {
-        Debug.Log("Start" +  gameObject.name);
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        // animator.SetBool("Move", true);
     }
 
     protected void FixedUpdate()
@@ -37,33 +35,15 @@ public abstract class MovingObject : MonoBehaviour
             currentDirection = nextDirection;
             nextDirection = Vector2.zero;
         }
-        else if (IsHorizontal(currentDirection) && IsVertical(nextDirection))
+        else if (IsDirectionAxisChange())
         {
-            var fraction = Math.Abs(transform.position.x - Mathf.Round(transform.position.x));
-
-            if (fraction < error)
+            if (IsCloseToCellCenter())
             {
                 RaycastHit2D hit = Physics2D.Raycast(transform.position, nextDirection, 1f);
 
-                if (hit.collider == null)
+                if (!hit)
                 {
-                    RoundXPosition();
-                    currentDirection = nextDirection;
-                    nextDirection = Vector2.zero;
-                }    
-            }
-        }
-        else if (IsVertical(currentDirection) && IsHorizontal(nextDirection))
-        {
-            var fraction = Math.Abs(transform.position.y - Mathf.Round(transform.position.y));
-
-            if (fraction < error)
-            {
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, nextDirection, 1f);
-
-                if (hit.collider == null)
-                {
-                    RoundYPosition();
+                    RoundPosition();
                     currentDirection = nextDirection;
                     nextDirection = Vector2.zero;
                 }
@@ -75,6 +55,24 @@ public abstract class MovingObject : MonoBehaviour
     }
 
 
+    protected bool IsCloseToCellCenter()
+    {
+        var horizontalFraction = Math.Abs(transform.position.x - Mathf.Round(transform.position.x));
+        var verticalFraction = Math.Abs(transform.position.y - Mathf.Round(transform.position.y));
+
+        return horizontalFraction < error && verticalFraction < error;
+    }
+
+    private bool IsDirectionAxisChange()
+    {
+        if (IsHorizontal(currentDirection))
+            return IsVertical(nextDirection);
+        else if (IsVertical(currentDirection))
+            return IsHorizontal(nextDirection);
+
+        return false;
+    }
+
     private bool IsHorizontal(Vector2 direction)
     {
         return Math.Abs(direction.x) == 1f && Math.Abs(direction.y) == 0f;;
@@ -85,14 +83,9 @@ public abstract class MovingObject : MonoBehaviour
         return Math.Abs(direction.y) == 1f && Math.Abs(direction.x) == 0f;;
     }
 
-    private void RoundXPosition()
+    private void RoundPosition()
     {
-        transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, 0);
-    }
-
-    private void RoundYPosition()
-    {
-        transform.position = new Vector3(transform.position.x, Mathf.Round(transform.position.y), 0);
+        transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), 0);
     }
 
     private void SetVelocity()
