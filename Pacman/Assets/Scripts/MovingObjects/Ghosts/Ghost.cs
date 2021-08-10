@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Ghost : MovingObject
+public abstract class Ghost : MovingObject
 {
-    private readonly List<Vector2> directions = new List<Vector2> { Vector2.up, Vector2.left, Vector2.down, Vector2.right };
-    private readonly Dictionary<Vector2, int> priority = new Dictionary<Vector2, int> {
+    private static readonly List<Vector2> directions = new List<Vector2> { Vector2.up, Vector2.left, Vector2.down, Vector2.right };
+    private static readonly Dictionary<Vector2, int> priority = new Dictionary<Vector2, int> {
         {Vector2.up, 4},
         {Vector2.left, 3},
         {Vector2.down, 2},
@@ -34,7 +34,7 @@ public class Ghost : MovingObject
         if (IsCloseToCellCenter() && lastCell != currentCell)
         {
             var legalDirections = directions.Where(dir => IsLegalDirection(dir))
-                .OrderBy(dir => DistanceToPlayer(dir))
+                .OrderBy(dir => DistanceToTarget(dir))
                 .ThenByDescending(dir => priority[dir]);
 
             nextDirection = legalDirections.First();
@@ -55,10 +55,12 @@ public class Ghost : MovingObject
         return !hit;
     }
 
-    private float DistanceToPlayer(Vector3 direction)
+    private float DistanceToTarget(Vector3 direction)
     {
         var newPosition = transform.position + direction;
         var newCell = NavigationHelper.instance.GetCellOnBoard(newPosition);
-        return Vector3.Distance(newCell, NavigationHelper.instance.GetPlayerCell());
+        return Vector3.Distance(newCell, TargetCell());
     }
+
+    protected abstract Vector3Int TargetCell();
 }

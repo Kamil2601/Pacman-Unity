@@ -13,6 +13,8 @@ public abstract class MovingObject : MonoBehaviour
     protected Vector2 currentDirection = Vector2.right;
     protected Vector2 nextDirection;
 
+    public Vector2 CurrentDirection { get => currentDirection; }
+
     // Start is called before the first frame update
     protected void Start()
     {
@@ -92,6 +94,8 @@ public abstract class MovingObject : MonoBehaviour
     {
         rigidbody2D.velocity = currentDirection * speed;
     }
+
+    // public void SetPosition()
 
     protected abstract void SetAnimation();
     
