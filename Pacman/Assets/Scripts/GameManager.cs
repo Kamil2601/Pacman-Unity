@@ -6,12 +6,11 @@ using UnityEngine.Tilemaps;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-
-    // Start is called before the first frame update
-    [SerializeField] private GameObject player;
-    
-
     private Transform chasePoint;
+
+
+    private List<Ghost> ghosts;
+    private Player player;
 
     void Awake()
     {
@@ -22,15 +21,30 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+
+        ghosts = new List<Ghost>();
     }
 
-    private void Start()
+    public void AddGhost(Ghost ghost)
     {
-        chasePoint = player.transform.Find("ChasePoint");
+        if (!ghosts.Contains(ghost))
+            ghosts.Add(ghost);
     }
 
-    public Vector3 GetPlayerPosition()
+    public void AddPlayer(Player player)
     {
-        return player.transform.position;
+        this.player = player;
+    }
+
+    public void StopAll()
+    {
+        Debug.Log("Game Over!");
+
+        player.Stop();
+
+        foreach (var ghost in ghosts)
+        {
+            ghost.Stop();
+        }
     }
 }

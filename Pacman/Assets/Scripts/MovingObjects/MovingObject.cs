@@ -15,8 +15,15 @@ public abstract class MovingObject : MonoBehaviour
 
     public Vector2 CurrentDirection { get => currentDirection; }
 
+    public void Stop()
+    {
+        rigidbody2D.velocity = Vector2.zero;
+        currentDirection = Vector2.zero;
+        nextDirection = Vector2.zero;
+    }
+
     // Start is called before the first frame update
-    protected void Start()
+    protected virtual void Start()
     {
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();

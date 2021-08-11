@@ -10,6 +10,12 @@ public class Player : MovingObject
     private Quaternion upRotation = Quaternion.Euler(0,0,90);
     private Quaternion downRotation = Quaternion.Euler(0,0,270);
 
+    protected override void Start()
+    {
+        base.Start();
+        GameManager.instance.AddPlayer(this);
+    }
+
     protected override void SetNextDirection()
     {
         int horizontal = (int)Input.GetAxisRaw("Horizontal");
@@ -35,5 +41,13 @@ public class Player : MovingObject
             transform.rotation = leftRotation;
         else if (currentDirection == Vector2.right)
             transform.rotation = rightRotation;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Ghost"))
+        {
+            GameManager.instance.StopAll();
+        }
     }
 }

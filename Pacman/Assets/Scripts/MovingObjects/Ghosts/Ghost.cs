@@ -15,6 +15,12 @@ public abstract class Ghost : MovingObject
     
     private Vector3Int lastCell;
 
+    protected override void Start()
+    {
+        base.Start();
+        GameManager.instance.AddGhost(this);
+    }
+
     protected override void SetAnimation()
     {
         if (currentDirection == Vector2.left)
