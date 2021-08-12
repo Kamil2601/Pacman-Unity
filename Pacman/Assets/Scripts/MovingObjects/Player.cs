@@ -45,9 +45,15 @@ public class Player : MovingObject
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Ghost"))
+        if (other.CompareTag("Ghost"))
         {
             GameManager.instance.StopAll();
+            Die();
         }
+    }
+
+    private void Die()
+    {
+
     }
 }
