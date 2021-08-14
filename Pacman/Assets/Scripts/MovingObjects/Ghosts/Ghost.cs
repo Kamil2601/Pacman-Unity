@@ -15,6 +15,8 @@ public abstract class Ghost : MovingObject
     
     private Vector3Int lastCell;
 
+    [SerializeField] private Vector3Int scatterTarget;
+
     protected override void Start()
     {
         base.Start();

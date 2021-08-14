@@ -25,7 +25,7 @@ TextureImporter:
     second: pacman2_6
   - first:
       213: 4264489343786763426
-    second: pacman2_7
+    second: Death_9
   - first:
       213: -9219345210682621711
     second: Death_1
@@ -37,7 +37,7 @@ TextureImporter:
     second: Player_1
   - first:
       213: -4490815680405888742
-    second: pacman2_11
+    second: Eyes_Right
   - first:
       213: -6458099939546201805
     second: GhostOrange_Right_1
@@ -73,7 +73,7 @@ TextureImporter:
     second: pacman2_22
   - first:
       213: 5042474145188504982
-    second: pacman2_23
+    second: Death_10
   - first:
       213: 3411847729901451996
     second: Death_2
@@ -85,7 +85,7 @@ TextureImporter:
     second: Player_2
   - first:
       213: -4545460594196045730
-    second: pacman2_27
+    second: Eyes_Down
   - first:
       213: -8572265687855473460
     second: GhostOrange_Right_2
@@ -121,7 +121,7 @@ TextureImporter:
     second: pacman2_38
   - first:
       213: -110896435625292826
-    second: pacman2_39
+    second: Death_11
   - first:
       213: -263184500928728102
     second: Death_3
@@ -133,7 +133,7 @@ TextureImporter:
     second: Player_3
   - first:
       213: 1098000931115276028
-    second: pacman2_43
+    second: Eyes_Left
   - first:
       213: 5298688759585995854
     second: GhostOrange_Down_1
@@ -169,7 +169,7 @@ TextureImporter:
     second: pacman2_54
   - first:
       213: 658292856366406186
-    second: pacman2_55
+    second: Death_12
   - first:
       213: 3835436275454310438
     second: Death_4
@@ -181,7 +181,7 @@ TextureImporter:
     second: pacman2_58
   - first:
       213: -729251716937025100
-    second: pacman2_59
+    second: Eyes_Up
   - first:
       213: -2064830329404221001
     second: GhostOrange_Down_2
@@ -217,7 +217,7 @@ TextureImporter:
     second: pacman2_70
   - first:
       213: -6283725073101674098
-    second: pacman2_71
+    second: Empty
   - first:
       213: -672267311466144849
     second: Death_5
@@ -1018,7 +1018,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_7
+      name: Death_9
       rect:
         serializedVersion: 2
         x: 448
@@ -1084,8 +1084,8 @@ TextureImporter:
       name: Player_1
       rect:
         serializedVersion: 2
-        x: 640
-        y: 520
+        x: 638
+        y: 518
         width: 64
         height: 64
       alignment: 0
@@ -1102,7 +1102,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_11
+      name: Eyes_Right
       rect:
         serializedVersion: 2
         x: 704
@@ -1354,7 +1354,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_23
+      name: Death_10
       rect:
         serializedVersion: 2
         x: 448
@@ -1420,8 +1420,8 @@ TextureImporter:
       name: Player_2
       rect:
         serializedVersion: 2
-        x: 640
-        y: 456
+        x: 638
+        y: 455
         width: 64
         height: 64
       alignment: 0
@@ -1438,7 +1438,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_27
+      name: Eyes_Down
       rect:
         serializedVersion: 2
         x: 704
@@ -1690,7 +1690,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_39
+      name: Death_11
       rect:
         serializedVersion: 2
         x: 448
@@ -1756,8 +1756,8 @@ TextureImporter:
       name: Player_3
       rect:
         serializedVersion: 2
-        x: 640
-        y: 392
+        x: 638
+        y: 391
         width: 64
         height: 64
       alignment: 0
@@ -1774,7 +1774,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_43
+      name: Eyes_Left
       rect:
         serializedVersion: 2
         x: 704
@@ -2026,7 +2026,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_55
+      name: Death_12
       rect:
         serializedVersion: 2
         x: 449
@@ -2110,10 +2110,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_59
+      name: Eyes_Up
       rect:
         serializedVersion: 2
-        x: 704
+        x: 705
         y: 328
         width: 64
         height: 64
@@ -2362,11 +2362,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_71
+      name: Empty
       rect:
         serializedVersion: 2
         x: 448
-        y: 264
+        y: 261
         width: 64
         height: 64
       alignment: 0
@@ -2953,7 +2953,7 @@ TextureImporter:
       name: GhostRed_Up_2
       rect:
         serializedVersion: 2
-        x: 959
+        x: 960
         y: 136
         width: 64
         height: 64
@@ -3100,8 +3100,8 @@ TextureImporter:
       name: GhostBlue_Up_2
       rect:
         serializedVersion: 2
-        x: 895
-        y: 73
+        x: 896
+        y: 72
         width: 64
         height: 64
       alignment: 0

@@ -54,6 +54,7 @@ public class Player : MovingObject
 
     private void Die()
     {
-
+        transform.rotation = rightRotation;
+        animator.SetTrigger("Death");
     }
 }
