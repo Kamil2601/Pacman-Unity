@@ -109,7 +109,7 @@ TextureImporter:
     second: pacman2_34
   - first:
       213: 8659446456829573565
-    second: pacman2_35
+    second: Ghost_Frightened_1
   - first:
       213: 1494865033845265983
     second: pacman2_36
@@ -157,7 +157,7 @@ TextureImporter:
     second: pacman2_50
   - first:
       213: 3949347294816584022
-    second: pacman2_51
+    second: Ghost_Frightened_2
   - first:
       213: -7592544486247259531
     second: pacman2_52
@@ -205,7 +205,7 @@ TextureImporter:
     second: pacman2_66
   - first:
       213: -4363602497496357106
-    second: pacman2_67
+    second: Ghost_Frightened_3
   - first:
       213: -2839874180397601564
     second: pacman2_68
@@ -253,7 +253,7 @@ TextureImporter:
     second: pacman2_82
   - first:
       213: -7634862514573917362
-    second: pacman2_83
+    second: Ghost_Frightened_4
   - first:
       213: -4783345227126414421
     second: pacman2_84
@@ -1606,7 +1606,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_35
+      name: Ghost_Frightened_1
       rect:
         serializedVersion: 2
         x: 192
@@ -1942,7 +1942,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_51
+      name: Ghost_Frightened_2
       rect:
         serializedVersion: 2
         x: 192
@@ -2278,7 +2278,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_67
+      name: Ghost_Frightened_3
       rect:
         serializedVersion: 2
         x: 192
@@ -2572,7 +2572,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: pacman2_83
+      name: Ghost_Frightened_4
       rect:
         serializedVersion: 2
         x: 192
