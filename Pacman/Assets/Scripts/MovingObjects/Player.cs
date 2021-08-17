@@ -45,7 +45,8 @@ public class Player : MovingObject
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Ghost"))
+        var ghostScript = other.GetComponent<Ghost>();
+        if (ghostScript != null)
         {
             GameManager.instance.StopAll();
             Die();

@@ -5,6 +5,13 @@ using UnityEngine;
 
 public abstract class Ghost : MovingObject
 {
+    enum AnimationState
+    {
+        Normal,
+        Frightened,
+        Blinking
+    }
+
     private static readonly List<Vector2> directions = new List<Vector2> { Vector2.up, Vector2.left, Vector2.down, Vector2.right };
     private static readonly Dictionary<Vector2, int> priority = new Dictionary<Vector2, int> {
         {Vector2.up, 4},
@@ -12,12 +19,33 @@ public abstract class Ghost : MovingObject
         {Vector2.down, 2},
         {Vector2.right, 1}
     };
+
+
+    [SerializeField] private GameObject scatterTarget;
     
     private Vector3Int lastCell;
     private Mode mode;
-
-    [SerializeField] private GameObject scatterTarget;
     private Vector3Int scatterTargetCell;
+
+    public Mode Mode { get => mode; }
+
+    public IEnumerator SetFrightened(float seconds)
+    {
+        mode = Mode.Frightened;
+        animator.SetInteger("State", (int)AnimationState.Frightened);
+
+        nextDirection = -currentDirection;
+        SetCurrentDirection();
+
+        yield return new WaitForSeconds(seconds - 2);
+
+        animator.SetInteger("State", (int)AnimationState.Blinking);
+
+        yield return new WaitForSeconds(2);
+
+        mode = Mode.Chase;
+        animator.SetInteger("State", (int)AnimationState.Normal);
+    }
 
     protected override void Start()
     {
@@ -25,6 +53,8 @@ public abstract class Ghost : MovingObject
         GameManager.instance.AddGhost(this);
         mode = Mode.Scatter;
         scatterTargetCell = NavigationHelper.instance.GetCellOnBoard(scatterTarget.transform);
+
+        // StartCoroutine(SetFrightened(5));
     }
 
     protected override void SetAnimation()
