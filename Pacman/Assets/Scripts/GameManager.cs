@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        ghosts = new List<Ghost>();
+
         if (instance == null)
             instance = this;
 
@@ -19,7 +21,7 @@ public class GameManager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
 
-        ghosts = new List<Ghost>();
+        
     }
 
     public void AddGhost(Ghost ghost)

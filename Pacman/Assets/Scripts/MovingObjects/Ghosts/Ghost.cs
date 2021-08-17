@@ -14,13 +14,17 @@ public abstract class Ghost : MovingObject
     };
     
     private Vector3Int lastCell;
+    private Mode mode;
 
-    [SerializeField] private Vector3Int scatterTarget;
+    [SerializeField] private GameObject scatterTarget;
+    private Vector3Int scatterTargetCell;
 
     protected override void Start()
     {
         base.Start();
         GameManager.instance.AddGhost(this);
+        mode = Mode.Scatter;
+        scatterTargetCell = NavigationHelper.instance.GetCellOnBoard(scatterTarget.transform);
     }
 
     protected override void SetAnimation()
@@ -70,5 +74,18 @@ public abstract class Ghost : MovingObject
         return Vector3.Distance(newCell, TargetCell());
     }
 
-    protected abstract Vector3Int TargetCell();
+    private Vector3Int TargetCell()
+    {
+        switch (mode)
+        {
+            case Mode.Scatter:
+                return scatterTargetCell;
+            case Mode.Chase:
+                return ChaseTargetCell();
+        }
+
+        return ChaseTargetCell();
+    }
+
+    protected abstract Vector3Int ChaseTargetCell();
 }
