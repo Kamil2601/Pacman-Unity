@@ -1,13 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     private Transform chasePoint;
-
 
     private List<Ghost> ghosts;
     private Player player;

@@ -45,7 +45,7 @@ public abstract class Ghost : MovingObject
                 .OrderBy(dir => DistanceToTarget(dir))
                 .ThenByDescending(dir => priority[dir]);
 
-            nextDirection = legalDirections.First();
+            nextDirection = legalDirections.FirstOrDefault();
 
             lastCell = currentCell;
         }
