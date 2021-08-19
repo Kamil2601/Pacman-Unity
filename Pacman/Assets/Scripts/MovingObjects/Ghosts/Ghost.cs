@@ -29,7 +29,12 @@ public abstract class Ghost : MovingObject
 
     public Mode Mode { get => mode; }
 
-    public IEnumerator SetFrightened(float seconds)
+    public void SetFrightened(float seconds)
+    {
+        StartCoroutine(SetFrightenedCoroutine(seconds));
+    }
+
+    private IEnumerator SetFrightenedCoroutine(float seconds)
     {
         mode = Mode.Frightened;
         animator.SetInteger("State", (int)AnimationState.Frightened);
@@ -54,7 +59,7 @@ public abstract class Ghost : MovingObject
         mode = Mode.Chase;
         scatterTargetCell = NavigationHelper.instance.GetCellOnBoard(scatterTarget.transform);
 
-        // StartCoroutine(SetFrightened(20));
+        //
     }
 
     protected override void SetAnimation()

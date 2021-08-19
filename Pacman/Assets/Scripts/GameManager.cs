@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     private List<Ghost> ghosts;
     private Player player;
 
+    private float frightenedTime = 8f;
+
     void Awake()
     {
         ghosts = new List<Ghost>();
@@ -42,6 +44,14 @@ public class GameManager : MonoBehaviour
         foreach (var ghost in ghosts)
         {
             ghost.Stop();
+        }
+    }
+
+    public void SetGhostsFrightened()
+    {
+        foreach (var ghost in ghosts)
+        {
+            ghost.SetFrightened(frightenedTime);
         }
     }
 }

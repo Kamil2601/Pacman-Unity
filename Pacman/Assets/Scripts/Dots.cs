@@ -20,7 +20,7 @@ public class Dots : MonoBehaviour
             Vector3Int cell = tilemap.WorldToCell(other.transform.position);
             if (tilemap.GetTile(cell) == bigDotTile)
             {
-                Debug.Log("Big dot eaten!");
+                GameManager.instance.SetGhostsFrightened();
             }
             tilemap.SetTile(cell, null);
         }
