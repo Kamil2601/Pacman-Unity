@@ -9,7 +9,8 @@ public abstract class Ghost : MovingObject
     {
         Normal,
         Frightened,
-        Blinking
+        Blinking,
+        Eaten,
     }
 
     private static readonly List<Vector2> directions = new List<Vector2> { Vector2.up, Vector2.left, Vector2.down, Vector2.right };
