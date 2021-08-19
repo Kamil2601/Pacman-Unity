@@ -51,10 +51,10 @@ public abstract class Ghost : MovingObject
     {
         base.Start();
         GameManager.instance.AddGhost(this);
-        mode = Mode.Scatter;
+        mode = Mode.Chase;
         scatterTargetCell = NavigationHelper.instance.GetCellOnBoard(scatterTarget.transform);
 
-        // StartCoroutine(SetFrightened(5));
+        // StartCoroutine(SetFrightened(20));
     }
 
     protected override void SetAnimation()
@@ -79,7 +79,10 @@ public abstract class Ghost : MovingObject
                 .OrderBy(dir => DistanceToTarget(dir))
                 .ThenByDescending(dir => priority[dir]);
 
-            nextDirection = legalDirections.FirstOrDefault();
+            if (mode == Mode.Frightened)
+                nextDirection = legalDirections.LastOrDefault();
+            else
+                nextDirection = legalDirections.FirstOrDefault();
 
             lastCell = currentCell;
         }
@@ -106,15 +109,10 @@ public abstract class Ghost : MovingObject
 
     private Vector3Int TargetCell()
     {
-        switch (mode)
-        {
-            case Mode.Scatter:
-                return scatterTargetCell;
-            case Mode.Chase:
-                return ChaseTargetCell();
-        }
-
-        return ChaseTargetCell();
+        if (mode == Mode.Scatter)
+            return scatterTargetCell;
+        else
+            return ChaseTargetCell();
     }
 
     protected abstract Vector3Int ChaseTargetCell();
