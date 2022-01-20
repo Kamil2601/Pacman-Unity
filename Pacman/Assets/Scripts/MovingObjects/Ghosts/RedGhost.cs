@@ -6,6 +6,6 @@ public class RedGhost : Ghost
 {
     protected override Vector3Int ChaseTargetCell()
     {
-        return NavigationHelper.instance.GetPlayerCell();
+        return NavigationHelper.Instance.GetPlayerCell();
     }
 }

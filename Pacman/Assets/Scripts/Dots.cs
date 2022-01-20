@@ -20,7 +20,7 @@ public class Dots : MonoBehaviour
             Vector3Int cell = tilemap.WorldToCell(other.transform.position);
             if (tilemap.GetTile(cell) == bigDotTile)
             {
-                GameManager.instance.SetGhostsFrightened();
+                GameManager.Instance.SetGhostsFrightened();
             }
             tilemap.SetTile(cell, null);
         }

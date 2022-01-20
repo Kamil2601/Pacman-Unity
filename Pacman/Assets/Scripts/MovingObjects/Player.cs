@@ -13,7 +13,7 @@ public class Player : MovingObject
     protected override void Start()
     {
         base.Start();
-        GameManager.instance.AddPlayer(this);
+        GameManager.Instance.AddPlayer(this);
     }
 
     protected override void SetNextDirection()
@@ -45,10 +45,14 @@ public class Player : MovingObject
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        var ghostScript = other.GetComponent<Ghost>();
-        if (ghostScript != null)
+        var ghost = other.GetComponentInParent<Ghost>();
+
+        if (!ghost)
+            return;
+
+        if (ghost.Mode != Mode.Frightened && ghost.Mode != Mode.Eaten)
         {
-            GameManager.instance.StopAll();
+            GameManager.Instance.StopAll();
             Die();
         }
     }

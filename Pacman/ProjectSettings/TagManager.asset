@@ -5,14 +5,15 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ghost
+  - GhostTrigger
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - MovingObjects
   - Water
   - UI
-  - 
+  - Walls
   - 
   - 
   - 

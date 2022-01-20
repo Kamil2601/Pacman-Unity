@@ -1,15 +1,17 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class MovingObject : MonoBehaviour
 {
-    [SerializeField] private float speed;
-    [SerializeField] private float error = 0.05f;
+    [SerializeField] protected float speed;
+    private float error = 0.1f;
+    protected LayerMask raycastMask;
+
+    protected Vector3Int currentCell;
 
     private new Rigidbody2D rigidbody2D;
     protected Animator animator;
+
     protected Vector2 currentDirection = Vector2.right;
     protected Vector2 nextDirection;
 
@@ -25,12 +27,14 @@ public abstract class MovingObject : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Start()
     {
+        raycastMask = LayerMask.GetMask("Walls");
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
     }
 
     protected void FixedUpdate()
     {
+        currentCell = NavigationHelper.Instance.GetCellOnBoard(transform.position);
         SetNextDirection();
         SetCurrentDirection();    
     }
@@ -48,7 +52,7 @@ public abstract class MovingObject : MonoBehaviour
         {
             if (IsCloseToCellCenter())
             {
-                RaycastHit2D hit = Physics2D.Raycast(transform.position, nextDirection, 1f);
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, nextDirection, 1f, raycastMask);
 
                 if (!hit)
                 {
@@ -58,6 +62,8 @@ public abstract class MovingObject : MonoBehaviour
                 }
             }
         }
+
+        // currentDirection = nextDirection;
 
         SetAnimation();
         SetVelocity();
@@ -92,7 +98,7 @@ public abstract class MovingObject : MonoBehaviour
         return Math.Abs(direction.y) == 1f && Math.Abs(direction.x) == 0f;;
     }
 
-    private void RoundPosition()
+    protected void RoundPosition()
     {
         transform.position = new Vector3(Mathf.Round(transform.position.x), Mathf.Round(transform.position.y), 0);
     }

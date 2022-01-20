@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    private static GameManager instance;
     private Transform chasePoint;
 
     private List<Ghost> ghosts;
@@ -11,17 +11,23 @@ public class GameManager : MonoBehaviour
 
     private float frightenedTime = 8f;
 
+    public static GameManager Instance { get => instance; }
+
     void Awake()
     {
         ghosts = new List<Ghost>();
 
-        if (instance == null)
+        if (Instance == null)
             instance = this;
 
-        else if (instance != this)
+        else if (Instance != this)
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start() {
+        
     }
 
     public void AddGhost(Ghost ghost)

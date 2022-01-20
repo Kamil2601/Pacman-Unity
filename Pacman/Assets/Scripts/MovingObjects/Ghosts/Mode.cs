@@ -3,5 +3,7 @@ public enum Mode
     Scatter,
     Chase,
     Frightened,
-    Eaten
+    Eaten,
+    InBox,
+    LeavingBox
 }
