@@ -5,5 +5,6 @@ public enum Mode
     Frightened,
     Eaten,
     InBox,
+    EnteringBox,
     LeavingBox
 }

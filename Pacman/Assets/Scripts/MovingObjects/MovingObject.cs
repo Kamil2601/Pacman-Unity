@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class MovingObject : MonoBehaviour
 {
-    [SerializeField] protected float speed;
+    protected float speed;
     private float error = 0.1f;
     protected LayerMask raycastMask;
 

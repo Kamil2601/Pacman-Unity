@@ -280,7 +280,7 @@ TextureImporter:
     second: pacman2_91
   - first:
       213: 6778248331638282936
-    second: GhostOrange_Left_
+    second: GhostOrange_Left_2
   - first:
       213: 5671451393303726620
     second: GhostPink_Left_2
@@ -2740,7 +2740,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: GhostOrange_Left_
+      name: GhostOrange_Left_2
       rect:
         serializedVersion: 2
         x: 768
