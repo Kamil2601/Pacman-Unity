@@ -13,6 +13,7 @@ public class Player : MovingObject
     protected override void Start()
     {
         base.Start();
+        speed = Speed.Chase;
         GameManager.Instance.AddPlayer(this);
     }
 

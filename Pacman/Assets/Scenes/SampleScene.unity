@@ -3770,9 +3770,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   board: {fileID: 243246070}
-  player: {fileID: 1052457377}
-  boxCenter: {fileID: 1613933485}
-  boxGate: {fileID: 674600047}
+  player: {fileID: 1052457380}
+  redGhost: {fileID: 1915999322}
+  pinkTarget: {fileID: 285735575}
+  boxCenter: {fileID: 1613933486}
+  boxGate: {fileID: 674600048}
 --- !u!1 &791532856
 GameObject:
   m_ObjectHideFlags: 0
@@ -3807,7 +3809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scatterTarget: {fileID: 1913220280}
-  waitingTime: 4
+  waitingTime: 1
 --- !u!61 &791532858
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4242,7 +4244,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1052457378
 Animator:
   serializedVersion: 3
@@ -4321,7 +4323,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052457377}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.030000001, y: -6, z: 0}
+  m_LocalPosition: {x: 0, y: -6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 0.778}
   m_Children:
   - {fileID: 514103144}
@@ -4642,11 +4644,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1406941933}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb5429e5297381302add2ea104024f54, type: 3}
+  m_Script: {fileID: 11500000, guid: 0d1aec0ac8692dfdb9912107712069cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   scatterTarget: {fileID: 128836570}
-  waitingTime: 8
+  waitingTime: 3
 --- !u!61 &1406941935
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -5249,7 +5251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scatterTarget: {fileID: 1879716199}
-  waitingTime: 12
+  waitingTime: 2
 --- !u!61 &2075416082
 BoxCollider2D:
   m_ObjectHideFlags: 0

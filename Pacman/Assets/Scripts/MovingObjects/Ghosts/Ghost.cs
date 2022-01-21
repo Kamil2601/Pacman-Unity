@@ -28,7 +28,7 @@ public abstract class Ghost : MovingObject
     private Vector3Int lastCell;
     
     private Mode mode;
-    private Vector3Int scatterTargetCell;
+    protected Vector3Int scatterTargetCell;
 
     public Mode Mode { get => mode; }
 
@@ -60,9 +60,7 @@ public abstract class Ghost : MovingObject
     {
         if (mode == Mode.InBox || mode == Mode.EnteringBox)
         {
-            Debug.Log("Box center reached");
             mode = Mode.LeavingBox;
-            // speed = Speed.BoxLeave;
             boxCollider.enabled = false;
             RoundPosition();
             currentDirection = Vector2.up;
@@ -75,7 +73,7 @@ public abstract class Ghost : MovingObject
         if (mode == Mode.LeavingBox)
         {
             boxCollider.enabled = true;
-            mode = Mode.Scatter;
+            mode = Mode.Chase;
             speed = Speed.Chase;      
         }
         else if (mode == Mode.Eaten)
@@ -119,6 +117,7 @@ public abstract class Ghost : MovingObject
         GameManager.Instance.AddGhost(this);
         scatterTargetCell = NavigationHelper.Instance.GetCellOnBoard(scatterTarget.transform);
         // currentDirection = Vector2.right;
+        mode = Mode.Chase;
         speed = Speed.Chase;
 
         if (waitingTime > 0)
