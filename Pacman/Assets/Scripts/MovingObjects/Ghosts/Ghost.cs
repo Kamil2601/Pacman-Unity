@@ -35,9 +35,18 @@ public abstract class Ghost : MovingObject
     private Coroutine frightenedCoroutine;
     private BoxCollider2D boxCollider;
 
-    public void SetFrightened(float seconds = 10)
+    private bool fixedMove = true;
+    private Vector3Int fixedMoveTarget;
+
+    public void SetFrightened(float seconds = 20)
     {
-        if (mode == Mode.Scatter || mode == Mode.Chase)
+        if (fixedMove)
+        {
+            mode = Mode.Frightened;
+            animator.SetInteger("State", (int)AnimationState.Frightened);
+            frightenedCoroutine = StartCoroutine(FrightenedCoroutine(seconds));
+        }
+        else if (mode == Mode.Scatter || mode == Mode.Chase)
         {
             mode = Mode.Frightened;
             speed = Speed.Frightened;
@@ -58,27 +67,29 @@ public abstract class Ghost : MovingObject
 
     public void BoxCenterTriggered()
     {
-        if (mode == Mode.InBox || mode == Mode.EnteringBox)
+        if (fixedMove)
         {
-            mode = Mode.LeavingBox;
+            fixedMoveTarget = NavigationHelper.Instance.BoxGate;
             boxCollider.enabled = false;
             RoundPosition();
             currentDirection = Vector2.up;
-            animator.SetInteger("State", (int)AnimationState.Normal);
         }
     }
 
     public void BoxGateTriggered()
     {
-        if (mode == Mode.LeavingBox)
+        if (fixedMove)
         {
+            fixedMove = false;
             boxCollider.enabled = true;
-            mode = Mode.Chase;
-            speed = Speed.Chase;      
+            if (mode == Mode.Frightened)
+                speed = Speed.Frightened;
+            else
+                speed = Speed.Chase;  
         }
         else if (mode == Mode.Eaten)
         {
-            mode = Mode.EnteringBox;
+            fixedMove = true;
             boxCollider.enabled = false;
             RoundPosition();
             currentDirection = Vector2.down;
@@ -94,15 +105,20 @@ public abstract class Ghost : MovingObject
         animator.SetInteger("State", (int)AnimationState.Blinking);
 
         yield return new WaitForSeconds(2);
-
+        
         mode = Mode.Chase;
-        speed = Speed.Chase;
+
+        if (!fixedMove)
+        {
+            speed = Speed.Chase;
+        }
         animator.SetInteger("State", (int)AnimationState.Normal);
     }
 
     private IEnumerator WaitInBox(float seconds)
     {
-        mode = Mode.InBox;
+        fixedMove = true;
+        fixedMoveTarget = NavigationHelper.Instance.BoxCenter;
         speed = Speed.BoxWait;
 
         yield return new WaitForSeconds(seconds);
@@ -116,8 +132,7 @@ public abstract class Ghost : MovingObject
         boxCollider = GetComponent<BoxCollider2D>();
         GameManager.Instance.AddGhost(this);
         scatterTargetCell = NavigationHelper.Instance.GetCellOnBoard(scatterTarget.transform);
-        // currentDirection = Vector2.right;
-        mode = Mode.Chase;
+        mode = Mode.Scatter;
         speed = Speed.Chase;
 
         if (waitingTime > 0)
@@ -148,10 +163,14 @@ public abstract class Ghost : MovingObject
     {
         var legalDirections = directions.Where(dir => IsLegalDirection(dir))
                 .OrderBy(dir => DistanceToTarget(dir))
-                .ThenByDescending(dir => priority[dir]);
+                .ThenByDescending(dir => priority[dir])
+                .ToList();
 
-        if (mode == Mode.Frightened)
-            nextDirection = legalDirections.LastOrDefault();
+        if (mode == Mode.Frightened && !fixedMove)
+        {
+            int index = Random.Range(0, legalDirections.Count);
+            nextDirection = legalDirections[index];
+        }
         else
             nextDirection = legalDirections.FirstOrDefault();
 
@@ -160,7 +179,7 @@ public abstract class Ghost : MovingObject
 
     private bool IsLegalDirection(Vector2 direction)
     {
-        if (mode == Mode.InBox || mode == Mode.LeavingBox || mode == Mode.EnteringBox)
+        if (fixedMove)
             return true;
 
         if (direction == -currentDirection)
@@ -184,13 +203,11 @@ public abstract class Ghost : MovingObject
 
     private Vector3Int TargetCell()
     {
+        if (fixedMove)
+            return fixedMoveTarget;
         if (mode == Mode.Scatter)
             return scatterTargetCell;
-        else if (mode == Mode.Chase || mode == Mode.Frightened)
-            return ChaseTargetCell();
-        else if (mode == Mode.InBox || mode == Mode.EnteringBox)
-            return NavigationHelper.Instance.BoxCenter;
-        else if (mode == Mode.Eaten || mode == Mode.LeavingBox)
+        else if (mode == Mode.Eaten)
             return NavigationHelper.Instance.BoxGate;
         else
             return ChaseTargetCell();
@@ -218,7 +235,7 @@ public abstract class Ghost : MovingObject
 
     private void Die()
     {
-        StopAllCoroutines();
+        StopCoroutine(frightenedCoroutine);
         mode = Mode.Eaten;
         speed = Speed.Eaten;
         animator.SetInteger("State", (int)AnimationState.Eaten);
