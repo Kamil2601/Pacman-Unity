@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,7 +12,10 @@ public class GameManager : MonoBehaviour
 
     private float frightenedTime = 8f;
 
+    private Mode currentGhostMode = Mode.Scatter;
+
     public static GameManager Instance { get => instance; }
+    public Mode CurrentGhostMode { get => currentGhostMode; }
 
     void Awake()
     {
@@ -24,10 +28,6 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
-
-    private void Start() {
-        
     }
 
     public void AddGhost(Ghost ghost)
@@ -43,14 +43,26 @@ public class GameManager : MonoBehaviour
 
     public void StopAll()
     {
-        Debug.Log("Game Over!");
-
         player.Stop();
 
         foreach (var ghost in ghosts)
         {
             ghost.Stop();
         }
+
+        StartCoroutine(WaitAndReset());
+    }
+
+    private IEnumerator WaitAndReset()
+    {
+        yield return new WaitForSeconds(2);
+
+        foreach (var ghost in ghosts)
+        {
+            ghost.ResetState();
+        }
+
+        player.ResetState();
     }
 
     public void SetGhostsFrightened()

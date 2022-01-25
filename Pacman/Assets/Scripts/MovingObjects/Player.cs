@@ -10,6 +10,18 @@ public class Player : MovingObject
     private Quaternion upRotation = Quaternion.Euler(0,0,90);
     private Quaternion downRotation = Quaternion.Euler(0,0,270);
 
+    private bool death = false;
+
+    public override void ResetState()
+    {
+        death = false;
+        transform.position = startingPosition;
+        currentDirection = Vector2.right;
+        nextDirection = Vector2.zero;
+        animator.SetTrigger("Switch");
+        speed = Speed.Chase;
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -34,6 +46,9 @@ public class Player : MovingObject
 
     protected override void SetAnimation()
     {
+        if (death)
+            return;
+
         if (currentDirection == Vector2.down)
             transform.rotation = downRotation;
         else if (currentDirection == Vector2.up)
@@ -53,14 +68,15 @@ public class Player : MovingObject
 
         if (ghost.Mode != Mode.Frightened && ghost.Mode != Mode.Eaten)
         {
-            GameManager.Instance.StopAll();
             Die();
+            GameManager.Instance.StopAll();
         }
     }
 
     private void Die()
     {
         transform.rotation = rightRotation;
-        animator.SetTrigger("Death");
+        death = true;
+        animator.SetTrigger("Switch");
     }
 }

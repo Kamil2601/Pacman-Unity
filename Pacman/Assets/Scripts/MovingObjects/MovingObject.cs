@@ -17,11 +17,14 @@ public abstract class MovingObject : MonoBehaviour
 
     public Vector2 CurrentDirection { get => currentDirection; }
 
+    protected Vector3 startingPosition;
+
+
+    public abstract void ResetState();
+
     public void Stop()
     {
-        rigidbody2D.velocity = Vector2.zero;
-        currentDirection = Vector2.zero;
-        nextDirection = Vector2.zero;
+        speed = 0;
     }
 
     // Start is called before the first frame update
@@ -30,6 +33,9 @@ public abstract class MovingObject : MonoBehaviour
         raycastMask = LayerMask.GetMask("Walls");
         rigidbody2D = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+
+        startingPosition = transform.position;
     }
 
     protected void FixedUpdate()

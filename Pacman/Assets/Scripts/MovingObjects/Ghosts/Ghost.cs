@@ -38,31 +38,30 @@ public abstract class Ghost : MovingObject
     private bool fixedMove = true;
     private Vector3Int fixedMoveTarget;
 
-    public void SetFrightened(float seconds = 20)
+    protected override void Start()
     {
-        if (fixedMove)
-        {
-            mode = Mode.Frightened;
-            animator.SetInteger("State", (int)AnimationState.Frightened);
-            frightenedCoroutine = StartCoroutine(FrightenedCoroutine(seconds));
-        }
-        else if (mode == Mode.Scatter || mode == Mode.Chase)
-        {
-            mode = Mode.Frightened;
-            speed = Speed.Frightened;
-            animator.SetInteger("State", (int)AnimationState.Frightened);
+        base.Start();
+        boxCollider = GetComponent<BoxCollider2D>();
+        GameManager.Instance.AddGhost(this);
+        scatterTargetCell = NavigationHelper.Instance.GetCellOnBoard(scatterTarget.transform);
 
-            currentDirection = -currentDirection;
-            ForceSetNextDirection();
-            lastCell = scatterTargetCell;
+        ResetState();
+    }
 
-            frightenedCoroutine = StartCoroutine(FrightenedCoroutine(seconds));
-        }
-        else if (mode == Mode.Frightened)
-        {
-            StopCoroutine(frightenedCoroutine);
-            frightenedCoroutine = StartCoroutine(FrightenedCoroutine(seconds));
-        }
+
+    public override void ResetState()
+    {
+        StopAllCoroutines();
+        transform.position = startingPosition;
+
+        mode = Mode.Scatter;
+        speed = Speed.Chase;
+        lastCell = scatterTargetCell;
+
+        animator.SetInteger("State", (int)AnimationState.Normal);
+
+        if (waitingTime > 0)
+            StartCoroutine(WaitInBox(waitingTime));
     }
 
     public void BoxCenterTriggered()
@@ -73,6 +72,12 @@ public abstract class Ghost : MovingObject
             boxCollider.enabled = false;
             RoundPosition();
             currentDirection = Vector2.up;
+
+            if (mode == Mode.Eaten)
+            {
+                animator.SetInteger("State", (int)AnimationState.Normal);
+                mode = Mode.Scatter;
+            }
         }
     }
 
@@ -85,17 +90,41 @@ public abstract class Ghost : MovingObject
             if (mode == Mode.Frightened)
                 speed = Speed.Frightened;
             else
-                speed = Speed.Chase;  
+                speed = Speed.Chase;
         }
         else if (mode == Mode.Eaten)
         {
             fixedMove = true;
+            fixedMoveTarget = NavigationHelper.Instance.BoxCenter;
             boxCollider.enabled = false;
             RoundPosition();
             currentDirection = Vector2.down;
         }
+    }
 
-        
+    public void SetFrightened(float seconds = 20)
+    {
+        animator.SetInteger("State", (int)AnimationState.Frightened);
+        if (fixedMove)
+        {
+            mode = Mode.Frightened;
+        }
+        else if (mode == Mode.Scatter || mode == Mode.Chase)
+        {
+            mode = Mode.Frightened;
+            speed = Speed.Frightened;
+            animator.SetInteger("State", (int)AnimationState.Frightened);
+
+            currentDirection = -currentDirection;
+            ForceSetNextDirection();
+            lastCell = scatterTargetCell;
+        }
+        else if (mode == Mode.Frightened)
+        {
+            StopCoroutine(frightenedCoroutine);
+        }
+
+        frightenedCoroutine = StartCoroutine(FrightenedCoroutine(seconds));
     }
 
     private IEnumerator FrightenedCoroutine(float seconds)
@@ -126,30 +155,28 @@ public abstract class Ghost : MovingObject
         speed = Speed.BoxLeave;
     }
 
-    protected override void Start()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        base.Start();
-        boxCollider = GetComponent<BoxCollider2D>();
-        GameManager.Instance.AddGhost(this);
-        scatterTargetCell = NavigationHelper.Instance.GetCellOnBoard(scatterTarget.transform);
-        mode = Mode.Scatter;
-        speed = Speed.Chase;
+        var player = other.GetComponent<Player>();
 
-        if (waitingTime > 0)
-            StartCoroutine(WaitInBox(waitingTime));
+        if (!player)
+            return;
+
+        if (this.Mode == Mode.Frightened)
+        {
+            Die();
+        }
     }
 
-    protected override void SetAnimation()
+    private void Die()
     {
-        if (currentDirection == Vector2.left)
-            animator.SetInteger("Direction", (int)Direction.Left);
-        else if (currentDirection == Vector2.right)
-            animator.SetInteger("Direction", (int)Direction.Right);
-        else if (currentDirection == Vector2.up)
-            animator.SetInteger("Direction", (int)Direction.Up);
-        else if (currentDirection == Vector2.down)
-            animator.SetInteger("Direction", (int)Direction.Down);
+        StopCoroutine(frightenedCoroutine);
+        mode = Mode.Eaten;
+        speed = Speed.Eaten;
+        animator.SetInteger("State", (int)AnimationState.Eaten);
     }
+
+    #region no mode/fixedMove change
 
     protected override void SetNextDirection()
     { 
@@ -213,19 +240,6 @@ public abstract class Ghost : MovingObject
             return ChaseTargetCell();
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        var player = other.GetComponent<Player>();
-
-        if (!player)
-            return;
-
-        if (this.Mode == Mode.Frightened)
-        {
-            Die();
-        }
-    }
-
     private void OnCollisionEnter2D(Collision2D other)
     {
         ForceSetNextDirection();
@@ -233,13 +247,19 @@ public abstract class Ghost : MovingObject
         SetCurrentDirection();
     }
 
-    private void Die()
+    protected override void SetAnimation()
     {
-        StopCoroutine(frightenedCoroutine);
-        mode = Mode.Eaten;
-        speed = Speed.Eaten;
-        animator.SetInteger("State", (int)AnimationState.Eaten);
+        if (currentDirection == Vector2.left)
+            animator.SetInteger("Direction", (int)Direction.Left);
+        else if (currentDirection == Vector2.right)
+            animator.SetInteger("Direction", (int)Direction.Right);
+        else if (currentDirection == Vector2.up)
+            animator.SetInteger("Direction", (int)Direction.Up);
+        else if (currentDirection == Vector2.down)
+            animator.SetInteger("Direction", (int)Direction.Down);
     }
 
     protected abstract Vector3Int ChaseTargetCell();
+
+    # endregion
 }
