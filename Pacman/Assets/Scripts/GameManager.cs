@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get => instance; }
     public Mode CurrentGhostMode { get => currentGhostMode; }
 
+    [SerializeField] private List<float> ghostModeTimes;
+    // private int index = 0;
+
     void Awake()
     {
         ghosts = new List<Ghost>();
@@ -28,6 +31,11 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(GhostModeChangeInTime());
     }
 
     public void AddGhost(Ghost ghost)
@@ -63,6 +71,8 @@ public class GameManager : MonoBehaviour
         }
 
         player.ResetState();
+
+        StopAllCoroutines();
     }
 
     public void SetGhostsFrightened()
@@ -70,6 +80,29 @@ public class GameManager : MonoBehaviour
         foreach (var ghost in ghosts)
         {
             ghost.SetFrightened(frightenedTime);
+        }
+    }
+
+    private IEnumerator GhostModeChangeInTime()
+    {
+        foreach (var time in ghostModeTimes)
+        {
+            yield return new WaitForSeconds(time);
+
+            ChangeCurrentGhostMode();
+        }
+    }
+
+    private void ChangeCurrentGhostMode()
+    {
+        if (currentGhostMode == Mode.Scatter)
+            currentGhostMode = Mode.Chase;
+        else
+            currentGhostMode = Mode.Scatter;
+
+        foreach (var ghost in ghosts)
+        {
+            ghost.SetMode();
         }
     }
 }

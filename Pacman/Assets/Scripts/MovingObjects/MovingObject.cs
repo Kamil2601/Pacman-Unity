@@ -38,7 +38,7 @@ public abstract class MovingObject : MonoBehaviour
         startingPosition = transform.position;
     }
 
-    protected void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         currentCell = NavigationHelper.Instance.GetCellOnBoard(transform.position);
         SetNextDirection();

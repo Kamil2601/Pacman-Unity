@@ -48,6 +48,14 @@ public abstract class Ghost : MovingObject
         ResetState();
     }
 
+    public void SetMode()
+    {
+        if (mode == Mode.Scatter || mode == Mode.Chase)
+        {
+            mode = GameManager.Instance.CurrentGhostMode;
+        }
+    }
+
 
     public override void ResetState()
     {
@@ -76,7 +84,7 @@ public abstract class Ghost : MovingObject
             if (mode == Mode.Eaten)
             {
                 animator.SetInteger("State", (int)AnimationState.Normal);
-                mode = Mode.Scatter;
+                mode = GameManager.Instance.CurrentGhostMode;
             }
         }
     }
@@ -135,7 +143,7 @@ public abstract class Ghost : MovingObject
 
         yield return new WaitForSeconds(2);
         
-        mode = Mode.Chase;
+        mode = GameManager.Instance.CurrentGhostMode;
 
         if (!fixedMove)
         {

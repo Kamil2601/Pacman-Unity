@@ -3743,6 +3743,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c069439cc3fd4a14a4e2f9b2a362624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ghostModeTimes:
+  - 7
+  - 20
+  - 7
+  - 20
+  - 5
+  - 20
+  - 5
 --- !u!4 &751519045
 Transform:
   m_ObjectHideFlags: 0
