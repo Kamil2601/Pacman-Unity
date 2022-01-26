@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ public abstract class Ghost : MovingObject
         {Vector2.right, 1}
     };
 
+    public static event Action ghostEaten;
 
     [SerializeField] private GameObject scatterTarget;
     [SerializeField] private float waitingTime;
@@ -42,7 +44,6 @@ public abstract class Ghost : MovingObject
     {
         base.Start();
         boxCollider = GetComponent<BoxCollider2D>();
-        GameManager.Instance.AddGhost(this);
         scatterTargetCell = NavigationHelper.Instance.GetCellOnBoard(scatterTarget.transform);
 
         ResetState();
@@ -86,6 +87,8 @@ public abstract class Ghost : MovingObject
                 animator.SetInteger("State", (int)AnimationState.Normal);
                 mode = GameManager.Instance.CurrentGhostMode;
             }
+
+            speed = Speed.BoxLeave;
         }
     }
 
@@ -178,6 +181,7 @@ public abstract class Ghost : MovingObject
 
     private void Die()
     {
+        ghostEaten?.Invoke();
         StopCoroutine(frightenedCoroutine);
         mode = Mode.Eaten;
         speed = Speed.Eaten;
@@ -203,7 +207,7 @@ public abstract class Ghost : MovingObject
 
         if (mode == Mode.Frightened && !fixedMove)
         {
-            int index = Random.Range(0, legalDirections.Count);
+            int index = UnityEngine.Random.Range(0, legalDirections.Count);
             nextDirection = legalDirections[index];
         }
         else

@@ -5,12 +5,20 @@ using UnityEngine;
 
 public class Player : MovingObject
 {
-    private Quaternion rightRotation = Quaternion.Euler(0,0,0);
-    private Quaternion leftRotation = Quaternion.Euler(0,0,180);
-    private Quaternion upRotation = Quaternion.Euler(0,0,90);
-    private Quaternion downRotation = Quaternion.Euler(0,0,270);
+    static class Rotation
+    {
+        public static Quaternion Right { get; } = Quaternion.Euler(0,0,0);
+        public static Quaternion Left { get; } = Quaternion.Euler(0,0,180);
+        public static Quaternion Up { get; } = Quaternion.Euler(0,0,90);
+        public static Quaternion Down { get; } = Quaternion.Euler(0,0,270);
+
+    }
+
+    public static event Action<int> playerDeath;
 
     private bool death = false;
+
+    private int livesLeft = 3;
 
     public override void ResetState()
     {
@@ -26,7 +34,6 @@ public class Player : MovingObject
     {
         base.Start();
         speed = Speed.Chase;
-        GameManager.Instance.AddPlayer(this);
     }
 
     protected override void SetNextDirection()
@@ -50,13 +57,13 @@ public class Player : MovingObject
             return;
 
         if (currentDirection == Vector2.down)
-            transform.rotation = downRotation;
+            transform.rotation = Rotation.Down;
         else if (currentDirection == Vector2.up)
-            transform.rotation = upRotation;
+            transform.rotation = Rotation.Up;
         else if (currentDirection == Vector2.left)
-            transform.rotation = leftRotation;
+            transform.rotation = Rotation.Left;
         else if (currentDirection == Vector2.right)
-            transform.rotation = rightRotation;
+            transform.rotation = Rotation.Right;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -69,14 +76,16 @@ public class Player : MovingObject
         if (ghost.Mode != Mode.Frightened && ghost.Mode != Mode.Eaten)
         {
             Die();
-            GameManager.Instance.StopAll();
         }
     }
 
     private void Die()
     {
-        transform.rotation = rightRotation;
+        livesLeft --;
+        transform.rotation = Rotation.Right;
         death = true;
         animator.SetTrigger("Switch");
+
+        playerDeath?.Invoke(livesLeft);
     }
 }

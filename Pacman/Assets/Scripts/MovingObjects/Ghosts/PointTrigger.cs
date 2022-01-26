@@ -8,6 +8,9 @@ public class PointTrigger : MonoBehaviour
     {
         var ghost = GetComponentInParent<Ghost>();
 
+        if (ghost == null)
+            return;
+
         if (other.name == "BoxCenter")
         {
             ghost.BoxCenterTriggered();

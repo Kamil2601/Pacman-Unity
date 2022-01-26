@@ -26,8 +26,6 @@ public class NavigationHelper : MonoBehaviour
 
         else if (Instance != this)
             Destroy(gameObject);
-
-        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()

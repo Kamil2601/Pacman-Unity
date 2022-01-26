@@ -29,27 +29,33 @@ public class GameManager : MonoBehaviour
 
         else if (Instance != this)
             Destroy(gameObject);
+    }
 
-        DontDestroyOnLoad(gameObject);
+    private void OnEnable()
+    {
+        Dots.bigDotEaten += SetGhostsFrightened;
+        Player.playerDeath += PlayerDeath;
+    }
+
+    private void OnDisable()
+    {
+        Dots.bigDotEaten -= SetGhostsFrightened;
+        Player.playerDeath -= PlayerDeath;
     }
 
     private void Start()
     {
+        foreach (var ghost in FindObjectsOfType<Ghost>())
+        {
+            ghosts.Add(ghost);
+        }
+
+        this.player = FindObjectOfType<Player>();
+
         StartCoroutine(GhostModeChangeInTime());
     }
-
-    public void AddGhost(Ghost ghost)
-    {
-        if (!ghosts.Contains(ghost))
-            ghosts.Add(ghost);
-    }
-
-    public void AddPlayer(Player player)
-    {
-        this.player = player;
-    }
-
-    public void StopAll()
+    
+    public void PlayerDeath(int livesLeft)
     {
         player.Stop();
 
@@ -58,7 +64,10 @@ public class GameManager : MonoBehaviour
             ghost.Stop();
         }
 
-        StartCoroutine(WaitAndReset());
+        if (livesLeft > 0)
+            StartCoroutine(WaitAndReset());
+        else
+            Debug.Log("Game Over!");
     }
 
     private IEnumerator WaitAndReset()
