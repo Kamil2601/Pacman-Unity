@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -18,23 +19,31 @@ public class GameManager : MonoBehaviour
     public Mode CurrentGhostMode { get => currentGhostMode; }
 
     [SerializeField] private List<float> ghostModeTimes;
-    // private int index = 0;
+    [SerializeField] private GameOver gameOverScreen;
 
     void Awake()
     {
-        ghosts = new List<Ghost>();
-
         if (Instance == null)
             instance = this;
 
         else if (Instance != this)
             Destroy(gameObject);
+
+        Time.timeScale = 0;
     }
 
     private void OnEnable()
     {
         Dots.bigDotEaten += SetGhostsFrightened;
         Player.playerDeath += PlayerDeath;
+        Dots.gameWon += GameWon;
+    }
+
+    private void GameWon()
+    {
+        StopAll();
+        gameOverScreen.gameObject.SetActive(true);
+        gameOverScreen.GameWon();
     }
 
     private void OnDisable()
@@ -45,39 +54,46 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        foreach (var ghost in FindObjectsOfType<Ghost>())
-        {
-            ghosts.Add(ghost);
-        }
+        ghosts = FindObjectsOfType<Ghost>().ToList();
 
         this.player = FindObjectOfType<Player>();
 
         StartCoroutine(GhostModeChangeInTime());
     }
     
-    public void PlayerDeath(int livesLeft)
+    private void PlayerDeath(int livesLeft)
     {
-        player.Stop();
-
-        foreach (var ghost in ghosts)
-        {
-            ghost.Stop();
-        }
+        StopAll();
 
         if (livesLeft > 0)
             StartCoroutine(WaitAndReset());
         else
-            Debug.Log("Game Over!");
+        {
+            StartCoroutine(EndGame());
+        }
+            
+    }
+
+    private void StopAll()
+    {
+        player.Stop();
+
+        ghosts.ForEach(ghost => ghost.Stop());
+    }
+
+    private IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(3);
+
+        gameOverScreen.gameObject.SetActive(true);
+        gameOverScreen.GameLost();
     }
 
     private IEnumerator WaitAndReset()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3);
 
-        foreach (var ghost in ghosts)
-        {
-            ghost.ResetState();
-        }
+        ghosts.ForEach(ghost => ghost.ResetState());
 
         player.ResetState();
 
@@ -86,10 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void SetGhostsFrightened()
     {
-        foreach (var ghost in ghosts)
-        {
-            ghost.SetFrightened(frightenedTime);
-        }
+        ghosts.ForEach(ghost => ghost.SetFrightened(frightenedTime));
     }
 
     private IEnumerator GhostModeChangeInTime()
@@ -109,9 +122,6 @@ public class GameManager : MonoBehaviour
         else
             currentGhostMode = Mode.Scatter;
 
-        foreach (var ghost in ghosts)
-        {
-            ghost.SetMode();
-        }
+        ghosts.ForEach(ghost => ghost.SetMode());
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +5,8 @@ public class Score : MonoBehaviour
 {
     private int score = 0;
     private Text text;
+
+    public int ScoreValue { get => score; }
 
     private void Start()
     {
