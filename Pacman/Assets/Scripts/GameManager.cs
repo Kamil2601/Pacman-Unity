@@ -41,7 +41,9 @@ public class GameManager : MonoBehaviour
 
     private void GameWon()
     {
-        StopAll();
+        // StopAll();
+        ghosts.ForEach(ghost => ghost.gameObject.SetActive(false));
+        player.gameObject.SetActive(false);
         gameOverScreen.gameObject.SetActive(true);
         gameOverScreen.GameWon();
     }

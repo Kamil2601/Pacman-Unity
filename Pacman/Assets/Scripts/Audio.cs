@@ -9,8 +9,6 @@ public class Audio : MonoBehaviour
     [SerializeField] private AudioClip playerDeath;
     [SerializeField] private AudioClip eatGhost;
 
-    private float lastDotEatenTime = -2f;
-
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
